@@ -245,7 +245,7 @@ html.tg .brand{top:calc(14px + var(--tg-top))}
 html.tg .chill{top:calc(44px + var(--tg-top))}
 html.tg .drive{bottom:calc(22px + var(--tg-bottom))}
 html.tg .g-top{top:calc(14px + var(--tg-top))}
-html.tg .garage video{top:auto;bottom:calc(var(--tg-bottom) + 40px);height:auto;aspect-ratio:9/16;transform:none}
+html.tg .garage video{top:auto;bottom:calc(var(--tg-bottom) + 40px);height:auto;aspect-ratio:9/16;transform:none;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 90px);mask-image:linear-gradient(to bottom,transparent 0,#000 90px)}
 /* blurred copy of the scene fills whatever the video does not cover */
 .garage::before{content:"";position:absolute;inset:-30px;background:var(--poster) center top/cover no-repeat;filter:blur(22px) brightness(.8)}
 html.tg .sheet{padding-bottom:calc(12px + var(--tg-bottom))}
