@@ -234,22 +234,21 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
   .wash{transition:none}
 }
 
-/* ---------- inside Telegram: the phone frame becomes the whole screen ---------- */
+/* ---------- inside Telegram: the app is a rounded card under Telegram's buttons, 10px from the edges ---------- */
 html.tg{
   --tg-top:calc(var(--tg-safe-area-inset-top,0px) + var(--tg-content-safe-area-inset-top,0px));
   --tg-bottom:var(--tg-safe-area-inset-bottom,0px);
+  --tg-h:var(--tg-viewport-stable-height,100vh);
 }
-html.tg body{padding:0;margin:0;display:block;height:var(--tg-viewport-stable-height,100%);min-height:100%;overflow:hidden}
-html.tg .phone{width:100%;height:100%;max-height:none;aspect-ratio:auto;border-radius:0;box-shadow:none}
-html.tg .brand{top:calc(14px + var(--tg-top))}
-html.tg .chill{top:calc(44px + var(--tg-top))}
-html.tg .drive{bottom:calc(22px + var(--tg-bottom))}
-html.tg .g-top{top:calc(14px + var(--tg-top))}
-html.tg .garage video{top:auto;bottom:calc(var(--tg-bottom) + 40px);height:auto;aspect-ratio:9/16;transform:none;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 90px);mask-image:linear-gradient(to bottom,transparent 0,#000 90px)}
-/* blurred copy of the scene fills whatever the video does not cover */
-.garage::before{content:"";position:absolute;inset:-30px;background:var(--poster) center top/cover no-repeat;filter:blur(22px) brightness(.8)}
-html.tg .sheet{padding-bottom:calc(12px + var(--tg-bottom))}
-html.tg .bk{padding-bottom:calc(16px + var(--tg-bottom))}
+html.tg body{
+  margin:0;height:var(--tg-h);min-height:0;overflow:hidden;box-sizing:border-box;
+  padding:calc(var(--tg-top) + 10px) 10px calc(var(--tg-bottom) + 10px);
+  display:grid;place-items:center;
+}
+html.tg .phone{
+  width:min(100%, calc((var(--tg-h) - var(--tg-top) - var(--tg-bottom) - 20px) * 9 / 16));
+  aspect-ratio:9/16;max-height:100%;border-radius:24px;
+}
 </style>
 
 </head>
