@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Viet Ride</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lobster&family=Unbounded:wght@500;800&family=Golos+Text:wght@400;600&display=swap">
+<style>
+/* Layout: one phone screen, live video under two world-buttons — Chill on the sunset sky at top, Drive on the neon road at bottom */
+:root{
+  --ground:#0b0a18;          /* page behind the phone */
+  --sun:#ffb36b;             /* sunset peach */
+  --coral:#ff6f61;
+  --cream:#fff3e2;
+  --ink:#2a1a14;             /* warm text on cream */
+  --magenta:#ff2bd6;
+  --cyan:#3df2ff;
+  --night:rgba(8,8,28,.55);
+  --f-retro:"Lobster","Pacifico",cursive;
+  --f-neon:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-ui:"Golos Text",system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{
+  background:var(--ground);color:var(--cream);font-family:var(--f-ui);
+  display:grid;place-items:center;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:16px;box-sizing:border-box;
+}
+.phone{
+  position:relative;width:min(100%,400px);aspect-ratio:9/16;max-height:calc(100% - 8px);
+  border-radius:28px;overflow:hidden;background:#000;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 80px rgba(255,43,214,.18),0 10px 60px rgba(255,140,80,.15);
+}
+.phone video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* top brand */
+.brand{
+  position:absolute;top:14px;left:0;right:0;text-align:center;z-index:3;
+  font:800 11px/1 var(--f-neon);letter-spacing:.32em;color:var(--cream);
+  text-shadow:0 1px 8px rgba(0,0,0,.45);
+}
+
+/* ---------- CHILL (top) ---------- */
+.chill{
+  position:absolute;top:44px;left:18px;z-index:3;
+  display:flex;flex-direction:column;align-items:flex-start;gap:6px;
+  background:none;border:0;padding:0;cursor:pointer;color:inherit;text-align:left;
+  animation:float 4.5s ease-in-out infinite;
+}
+.chill .pill{
+  font:400 34px/1 var(--f-retro);color:var(--ink);
+  padding:10px 24px 12px;border-radius:999px;
+  background:linear-gradient(180deg,var(--cream),#ffd9a8);
+  box-shadow:0 6px 0 var(--coral),0 12px 26px rgba(120,40,10,.35);
+  transition:transform .2s;
+}
+.chill .hint{
+  font:600 12px/1.3 var(--f-ui);color:var(--cream);padding-left:6px;
+  text-shadow:0 1px 6px rgba(80,30,0,.6);
+}
+.chill:hover .pill,.chill:focus-visible .pill{transform:translateY(-2px) rotate(-2deg)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* ---------- DRIVE (bottom) ---------- */
+.drive{
+  position:absolute;right:18px;bottom:22px;z-index:3;
+  display:flex;align-items:center;gap:8px;
+  padding:12px 24px 13px;border-radius:999px;cursor:pointer;color:inherit;
+  animation:float 4.5s ease-in-out infinite;animation-delay:-2.2s;
+  background:var(--night);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1.5px solid var(--magenta);
+  box-shadow:0 0 10px var(--magenta),inset 0 0 10px rgba(255,43,214,.35);
+}
+.drive .word{
+  font:800 26px/1 var(--f-neon);letter-spacing:.06em;color:#fff;
+  text-shadow:0 0 6px var(--magenta),0 0 16px var(--magenta);
+  animation:flicker 5s infinite;
+}
+.drive .hint{display:none}
+.drive:hover,.drive:focus-visible{box-shadow:0 0 22px var(--magenta),inset 0 0 20px rgba(255,43,214,.5)}
+@keyframes flicker{
+  0%,18%,22%,62%,64%,100%{opacity:1}
+  20%{opacity:.35} 63%{opacity:.55}
+}
+button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+
+/* одинаковые овалы для обеих кнопок */
+.chill .pill,.drive{
+  box-sizing:border-box;width:130px;height:56px;padding:0;
+  display:flex;align-items:center;justify-content:center;border-radius:999px;
+}
+.drive .word{font-size:20px}
+
+/* ---------- world entered ---------- */
+.wash{
+  position:absolute;inset:0;z-index:5;display:grid;place-items:center;align-content:center;gap:14px;
+  clip-path:circle(0% at var(--x,50%) var(--y,50%));transition:clip-path .7s cubic-bezier(.7,0,.2,1);
+  pointer-events:none;text-align:center;padding:24px;
+}
+.wash.open{clip-path:circle(150% at var(--x,50%) var(--y,50%));pointer-events:auto}
+.wash.chill-w{background:linear-gradient(170deg,#ffcf8a,var(--coral) 60%,#7a3b6e)}
+.wash.drive-w{background:radial-gradient(circle at 50% 30%,#2a0a4a,#06061a 70%)}
+.wash h2{margin:0;font-size:56px;line-height:1}
+.chill-w h2{font-family:var(--f-retro);color:var(--cream);text-shadow:0 5px 0 rgba(120,40,30,.4)}
+.drive-w h2{font-family:var(--f-neon);font-weight:800;color:#fff;text-shadow:0 0 10px var(--magenta),0 0 30px var(--magenta)}
+.wash p{margin:0;font:400 15px/1.45 var(--f-ui);max-width:26ch}
+.wash .back{
+  margin-top:10px;font:600 14px var(--f-ui);padding:10px 20px;border-radius:999px;cursor:pointer;
+  background:rgba(255,255,255,.14);color:inherit;border:1px solid rgba(255,255,255,.4);
+}
+
+/* ---------- world catalog (shared by Drive and Chill, themed by tokens) ---------- */
+.wash.garage{display:block;padding:0;background:#0d0b09;text-align:left}
+.w-drive{--acc:#ff2bd6;--acc-rgb:255,43,214;--price:var(--sun);--sheet-rgb:12,10,8;--title-font:var(--f-neon)}
+.w-chill{--acc:#ff7a59;--acc-rgb:255,122,89;--price:#ffd08a;--sheet-rgb:34,18,16;--title-font:var(--f-retro)}
+.garage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* Chill: lift the scene so the wheels sit above the sheet; the strip that opens at the bottom hides under it */
+.w-chill video{transform:translateY(-7%)}
+.g-top{
+  position:absolute;top:14px;left:14px;right:14px;z-index:2;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.g-back{
+  width:40px;height:40px;border-radius:50%;cursor:pointer;font:600 18px var(--f-ui);color:#fff;
+  background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.g-title{font:800 15px/1 var(--f-neon);letter-spacing:.14em;color:#fff;text-shadow:0 0 8px var(--acc),0 0 18px var(--acc)}
+.w-chill .g-title{font:400 28px/1 var(--f-retro);letter-spacing:0;color:var(--cream);text-shadow:0 3px 0 rgba(140,50,30,.55),0 2px 14px rgba(0,0,0,.35)}
+.g-nav{display:flex;align-items:center;gap:2px;padding:2px;border-radius:999px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.g-arrow{width:32px;height:32px;border-radius:50%;border:0;background:none;color:#fff;font:600 20px/1 var(--f-ui);cursor:pointer}
+.g-count{font:600 12px var(--f-ui);color:rgba(255,255,255,.8);font-variant-numeric:tabular-nums;min-width:30px;text-align:center}
+
+/* compact sheet, visible from the first frame (covers the watermark, keeps the wheels clear) */
+.sheet{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  padding:10px 14px 12px;display:grid;gap:7px;
+  background:linear-gradient(180deg,rgba(var(--sheet-rgb),.55),rgba(var(--sheet-rgb),.92) 30%);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid rgba(255,190,120,.18);border-radius:18px 18px 0 0;
+}
+.sheet .s-row,.sheet .chips{transition:opacity .25s}
+.garage.switching .s-row,.garage.switching .chips{opacity:0}
+.s-row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.s-row > div:first-child{min-width:0}
+.s-name{font:800 15px/1.15 var(--f-neon);color:#fff}
+.s-sub{font:400 11px/1.3 var(--f-ui);color:rgba(255,243,226,.7);margin-top:2px}
+.s-price{text-align:right;white-space:nowrap}
+.s-price b{display:block;font:800 13px/1.1 var(--f-neon);color:var(--price);font-variant-numeric:tabular-nums}
+.s-price span{font:400 11px var(--f-ui);color:rgba(255,243,226,.6)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips span{font:600 10.5px var(--f-ui);padding:4px 8px;border-radius:999px;color:var(--cream);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.rent{
+  height:36px;border-radius:999px;cursor:pointer;font:800 12px var(--f-neon);letter-spacing:.06em;color:#fff;
+  background:rgba(var(--acc-rgb),.16);border:1.5px solid var(--acc);
+  box-shadow:0 0 12px var(--acc),inset 0 0 12px rgba(var(--acc-rgb),.35);text-shadow:0 0 8px var(--acc);
+}
+/* Chill: warm retro button instead of neon */
+.w-chill .rent{
+  color:var(--ink);text-shadow:none;border:0;letter-spacing:.04em;
+  background:linear-gradient(180deg,var(--cream),#ffd9a8);
+  box-shadow:0 4px 0 var(--coral),0 8px 18px rgba(120,40,10,.35);
+}
+
+/* ---------- booking sheet ---------- */
+.bk-dim{position:absolute;inset:0;z-index:6;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s}
+.bk-dim.on{opacity:1;pointer-events:auto}
+.bk{
+  position:absolute;left:0;right:0;bottom:0;z-index:7;max-height:88%;overflow-y:auto;
+  padding:8px 16px 16px;border-radius:22px 22px 0 0;
+  background:rgb(var(--sheet-rgb));border-top:1px solid rgba(255,190,120,.2);
+  transform:translateY(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  font-family:var(--f-ui);color:var(--cream);
+}
+.w-drive .bk{background:#15110e}
+.bk.on{transform:none}
+.bk-grab{width:40px;height:4px;border-radius:4px;background:rgba(255,255,255,.25);margin:0 auto 12px}
+.bk-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.bk-head img{width:52px;height:52px;border-radius:12px;object-fit:cover;object-position:50% 70%}
+.bk-head > div{flex:1;min-width:0}
+.bk-name{font:800 15px/1.2 var(--f-neon);color:#fff}
+.bk-rate{font-size:12px;color:var(--price);margin-top:3px;font-variant-numeric:tabular-nums}
+.bk-x{width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+.bk-label{font:600 10.5px var(--f-ui);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,243,226,.5);margin:12px 0 6px}
+.bk-label-row{display:flex;justify-content:space-between;align-items:baseline}
+.bk-month{letter-spacing:.06em;color:var(--price);text-transform:none;font-size:12px}
+.bk-days-wrap{display:flex;align-items:center;gap:4px}
+.bk-arr{flex:0 0 26px;height:44px;border-radius:10px;border:0;background:rgba(255,255,255,.06);color:#fff;font-size:18px;cursor:pointer}
+.bk-arr:disabled{opacity:.25;cursor:default}
+.bk-days{display:flex;gap:6px;overflow-x:auto;padding:2px;scrollbar-width:none;scroll-behavior:smooth;cursor:grab;user-select:none;-webkit-user-select:none;flex:1;min-width:0}
+.bk-days::-webkit-scrollbar{display:none}
+.bk-days.dragging{cursor:grabbing;scroll-behavior:auto}
+.bk-days button{
+  flex:0 0 auto;width:46px;padding:6px 0;border-radius:12px;cursor:pointer;text-align:center;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--cream);font-family:var(--f-ui)
+}
+.bk-days .mstart{margin-left:10px;position:relative}
+.bk-days .mstart::before{content:"";position:absolute;left:-9px;top:8px;bottom:8px;width:1px;background:rgba(255,190,120,.35)}
+.bk-days small{display:block;font-size:10px;opacity:.6}
+.bk-days b{font-size:15px;font-variant-numeric:tabular-nums}
+.bk-days button.sel{border-color:var(--acc);background:rgba(var(--acc-rgb),.2);box-shadow:0 0 10px rgba(var(--acc-rgb),.5)}
+.bk-days button.inrange{background:rgba(var(--acc-rgb),.08);border-color:rgba(var(--acc-rgb),.35)}
+.bk-step{display:flex;align-items:center;justify-content:space-between;padding:6px;border-radius:14px;background:rgba(255,255,255,.06)}
+.bk-step button{width:38px;height:38px;border-radius:10px;border:0;background:rgba(255,255,255,.1);color:#fff;font-size:20px;cursor:pointer}
+.bk-step > span{font-size:14px;text-align:center}
+.bk-step b{font:800 18px var(--f-neon);font-variant-numeric:tabular-nums}
+.bk-step small{display:block;font-size:11px;color:rgba(255,243,226,.55);margin-top:2px}
+.bk-opt{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid rgba(255,255,255,.07);font-size:13.5px;cursor:pointer}
+.bk-opt input{accent-color:var(--acc);width:18px;height:18px}
+.bk-opt span{flex:1}
+.bk-opt em{font-style:normal;font-size:12px;color:rgba(255,243,226,.6);font-variant-numeric:tabular-nums}
+.bk-total{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:14px 0 12px}
+.bk-total > div{min-width:0}
+.bk-total span{font-size:13px;color:rgba(255,243,226,.7)}
+.bk-total small{display:block;font-size:11px;color:rgba(255,243,226,.45);margin-top:2px}
+.bk-total b{font:800 18px var(--f-neon);color:var(--price);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bk .rent{width:100%;height:46px;font-size:14px}
+.bk-done{text-align:center;padding:14px 4px 4px;display:grid;gap:8px;justify-items:center}
+.bk-done[hidden],.bk-form[hidden]{display:none}
+.bk-check{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:26px;color:#fff;border:1.5px solid var(--acc);box-shadow:0 0 16px var(--acc)}
+.bk-done p{margin:0;font-size:13.5px;line-height:1.45;max-width:30ch}
+.bk-muted{color:rgba(255,243,226,.55)}
+.bk-done .rent{margin-top:8px}
+
+@media (prefers-reduced-motion:reduce){
+  .bk,.bk-dim{transition:none}
+  .chill,.drive,.drive .word{animation:none}
+  .wash{transition:none}
+}
+</style>
+
+</head>
+<body>
+<div class="phone">
+  <video src="media/start.mp4" poster="media/poster.jpg" autoplay muted loop playsinline></video>
+
+  <div class="brand">VIET RIDE</div>
+
+  <button class="chill" id="btn-chill" data-world="chill" aria-label="Мир Чил: лёгкие скутеры">
+    <span class="pill">Чил</span>
+  </button>
+
+  <button class="drive" id="btn-drive" data-world="drive" aria-label="Мир Драйв: мощные байки">
+    <span class="word">ДРАЙВ</span>
+  </button>
+
+  <div class="wash garage w-chill" id="w-chill" role="dialog" aria-label="Чил"></div>
+  <div class="wash garage w-drive" id="w-drive" role="dialog" aria-label="Драйв"></div>
+</div>
+
+<script>
+/* ---------- demo data ---------- */
+const WORLDS={
+  drive:{
+    title:'ДРАЙВ',
+    bikes:[
+      {video:'media/garage.mp4',poster:'media/garage-end.jpg',name:'ADV 750 Touring',sub:'эндуро-туринг · для дальних поездок',price:1200000,chips:['750 см³','70 л.с.','ABS','кофры']},
+      {video:'media/chopper.mp4',poster:'media/chopper-end.jpg',name:'Cruiser 1300 Black',sub:'чоппер · для неспешных прогулок',price:1600000,chips:['1300 см³','V-twin','низкая посадка','хром']},
+      {video:'media/street.mp4',poster:'media/street-end.jpg',name:'Street Fighter 900',sub:'стрит · для динамичной езды по городу',price:1400000,chips:['900 см³','115 л.с.','ABS','квикшифтер']}
+    ],
+    options:[
+      {id:'helmet',label:'Два шлема',price:50000,perDay:true,on:true},
+      {id:'delivery',label:'Доставка к отелю',price:150000,perDay:false},
+      {id:'ins',label:'Страховка',price:100000,perDay:true}
+    ]
+  },
+  chill:{
+    title:'Чил',
+    bikes:[
+      {video:'media/vision.mp4',poster:'media/vision-end.jpg',name:'Honda Vision',sub:'скутер · для города и пляжа',price:200000,chips:['110 см³','автомат','багажник','экономичный']},
+      {video:'media/cub.mp4',poster:'media/cub-end.jpg',name:'Honda Super Cub',sub:'ретро-мопед · легенда Вьетнама',price:250000,chips:['110 см³','полуавтомат','ретро','лёгкий']},
+      {video:'media/vespa.mp4',poster:'media/vespa-end.jpg',name:'Vespa Primavera',sub:'итальянская классика · для красивых фото',price:450000,chips:['125 см³','автомат','стиль','мягкий ход']}
+    ],
+    options:[
+      {id:'helmet',label:'Два шлема',price:30000,perDay:true,on:true},
+      {id:'delivery',label:'Доставка к отелю',price:100000,perDay:false},
+      {id:'ins',label:'Страховка',price:50000,perDay:true}
+    ]
+  }
+};
+
+/* ---------- helpers ---------- */
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₫';
+const wd=['вс','пн','вт','ср','чт','пт','сб'],mon=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+const monFull=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const dayWord=n=>{const a=n%10,b=n%100;return a===1&&b!==11?'день':a>=2&&a<=4&&(b<10||b>=20)?'дня':'дней'};
+const today=new Date();today.setHours(0,0,0,0);
+const dateAt=i=>{const d=new Date(today);d.setDate(d.getDate()+i);return d};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DAYS_AHEAD=90;
+
+/* ---------- one world = catalog + booking ---------- */
+function buildWorld(key){
+  const W=WORLDS[key],root=document.getElementById('w-'+key),B=W.bikes;
+  root.innerHTML=`
+    <video muted playsinline preload="auto"></video>
+    <div class="g-top">
+      <button class="g-back" aria-label="Назад">←</button>
+      <span class="g-title">${W.title}</span>
+      <span class="g-nav">
+        <button class="g-arrow" data-dir="-1" aria-label="Предыдущий">‹</button>
+        <span class="g-count"></span>
+        <button class="g-arrow" data-dir="1" aria-label="Следующий">›</button>
+      </span>
+    </div>
+    <div class="sheet">
+      <div class="s-row">
+        <div><div class="s-name"></div><div class="s-sub"></div></div>
+        <div class="s-price"><b></b><span>в день</span></div>
+      </div>
+      <div class="chips"></div>
+      <button class="rent rent-open">Арендовать</button>
+    </div>
+    <div class="bk-dim"></div>
+    <div class="bk" role="dialog" aria-label="Бронирование" aria-hidden="true">
+      <div class="bk-grab"></div>
+      <div class="bk-form">
+        <div class="bk-head">
+          <img class="bk-thumb" alt="">
+          <div><div class="bk-name"></div><div class="bk-rate"></div></div>
+          <button class="bk-x bk-close" aria-label="Закрыть">✕</button>
+        </div>
+        <div class="bk-label bk-label-row"><span>Начало аренды</span><span class="bk-month"></span></div>
+        <div class="bk-days-wrap">
+          <button class="bk-arr days-prev" aria-label="Раньше">‹</button>
+          <div class="bk-days"></div>
+          <button class="bk-arr days-next" aria-label="Позже">›</button>
+        </div>
+        <div class="bk-label">Срок</div>
+        <div class="bk-step">
+          <button class="d-minus" aria-label="Меньше дней">−</button>
+          <span><b class="d-num"></b> <span class="d-word"></span><small class="d-until"></small></span>
+          <button class="d-plus" aria-label="Больше дней">+</button>
+        </div>
+        <div class="bk-label">Опции</div>
+        ${W.options.map(o=>`<label class="bk-opt"><input type="checkbox" id="${key}-o-${o.id}" data-opt="${o.id}" ${o.on?'checked':''}><span>${o.label}</span><em>+${fmt(o.price)}${o.perDay?' / день':''}</em></label>`).join('')}
+        <div class="bk-total">
+          <div><span>Итого</span><small class="t-note"></small></div>
+          <b class="t-sum"></b>
+        </div>
+        <button class="rent bk-send">Забронировать</button>
+      </div>
+      <div class="bk-done" hidden>
+        <div class="bk-check">✓</div>
+        <div class="bk-name">Бронь отправлена</div>
+        <p class="bk-summary"></p>
+        <p class="bk-muted">Менеджер проката напишет вам в Telegram в течение 15 минут.</p>
+        <button class="rent bk-close">Готово</button>
+      </div>
+    </div>`;
+  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)];
+  const v=$('video'),bk=$('.bk'),dim=$('.bk-dim'),dayRow=$('.bk-days');
+  let cur=0,bkStart=0,bkDays=3,dragMoved=false;
+
+  /* catalog */
+  function play(){
+    if(reduce){v.currentTime=v.duration||6;return}
+    try{v.currentTime=0}catch(e){}
+    v.play().catch(()=>{});
+  }
+  function fill(){
+    const b=B[cur];
+    $('.s-name').textContent=b.name;$('.s-sub').textContent=b.sub;
+    $('.s-price b').textContent=fmt(b.price);
+    $('.chips').innerHTML=b.chips.map(c=>'<span>'+c+'</span>').join('');
+    $('.g-count').textContent=(cur+1)+' / '+B.length;
+  }
+  function show(i){
+    cur=(i+B.length)%B.length;const b=B[cur];
+    root.classList.add('switching');
+    setTimeout(()=>{fill();root.classList.remove('switching')},250);
+    v.poster=b.poster;v.src=b.video;v.load();play();
+  }
+  v.poster=B[0].poster;v.src=B[0].video;fill();
+  $$('.g-arrow').forEach(a=>a.addEventListener('click',()=>show(cur+ +a.dataset.dir)));
+  $('.g-back').addEventListener('click',()=>{closeBk();root.classList.remove('open')});
+  let tx=null;
+  root.addEventListener('touchstart',e=>{tx=bk.classList.contains('on')||e.target.closest('.bk')?null:e.touches[0].clientX},{passive:true});
+  root.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;tx=null;if(Math.abs(dx)>50)show(cur+(dx<0?1:-1))});
+
+  /* dates */
+  for(let i=0;i<DAYS_AHEAD;i++){
+    const d=dateAt(i),btn=document.createElement('button');
+    btn.innerHTML='<small>'+(i===0?'сег':wd[d.getDay()])+'</small><b>'+d.getDate()+'</b>';
+    btn.setAttribute('aria-label',d.getDate()+' '+mon[d.getMonth()]);
+    btn.dataset.m=d.getMonth();btn.dataset.y=d.getFullYear();
+    if(i>0&&d.getDate()===1)btn.classList.add('mstart');
+    btn.addEventListener('click',()=>{if(dragMoved)return;bkStart=i;render()});
+    dayRow.appendChild(btn);
+  }
+  const dPrev=$('.days-prev'),dNext=$('.days-next');
+  function syncDays(){
+    const left=dayRow.scrollLeft+10;
+    const first=[...dayRow.children].find(el=>el.offsetLeft-dayRow.offsetLeft+el.offsetWidth>left)||dayRow.children[0];
+    $('.bk-month').textContent=monFull[+first.dataset.m]+' '+first.dataset.y;
+    dPrev.disabled=dayRow.scrollLeft<4;
+    dNext.disabled=dayRow.scrollLeft+dayRow.clientWidth>=dayRow.scrollWidth-4;
+  }
+  dayRow.addEventListener('scroll',syncDays,{passive:true});
+  dPrev.addEventListener('click',()=>dayRow.scrollBy({left:-dayRow.clientWidth*.8}));
+  dNext.addEventListener('click',()=>dayRow.scrollBy({left:dayRow.clientWidth*.8}));
+  let dragX=null,dragLeft=0;
+  dayRow.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;dragX=e.clientX;dragLeft=dayRow.scrollLeft;dragMoved=false});
+  window.addEventListener('pointermove',e=>{
+    if(dragX===null)return;const dx=e.clientX-dragX;
+    if(Math.abs(dx)>4){dragMoved=true;dayRow.classList.add('dragging')}
+    if(dragMoved)dayRow.scrollLeft=dragLeft-dx;
+  });
+  window.addEventListener('pointerup',()=>{if(dragX===null)return;dragX=null;dayRow.classList.remove('dragging');setTimeout(()=>dragMoved=false,0)});
+  dayRow.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){dayRow.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+
+  /* booking */
+  function render(){
+    [...dayRow.children].forEach((el,i)=>{el.classList.toggle('sel',i===bkStart);el.classList.toggle('inrange',i>bkStart&&i<bkStart+bkDays)});
+    const end=dateAt(bkStart+bkDays);
+    $('.d-num').textContent=bkDays;$('.d-word').textContent=dayWord(bkDays);
+    $('.d-until').textContent='вернуть '+end.getDate()+' '+mon[end.getMonth()];
+    let sum=B[cur].price*bkDays;
+    W.options.forEach(o=>{if(root.querySelector('[data-opt="'+o.id+'"]').checked)sum+=o.perDay?o.price*bkDays:o.price});
+    let note='залог — паспорт или депозит';
+    if(bkDays>=7){sum=Math.round(sum*0.9/1000)*1000;note='скидка 10% от 7 дней · залог — паспорт или депозит'}
+    $('.t-sum').textContent=fmt(sum);$('.t-note').textContent=note;
+    return {sum,end};
+  }
+  function openBk(){
+    const b=B[cur];
+    $('.bk-form .bk-name').textContent=b.name;
+    $('.bk-rate').textContent=fmt(b.price)+' в день';
+    $('.bk-thumb').src=b.poster;
+    $('.bk-form').hidden=false;$('.bk-done').hidden=true;
+    render();bk.classList.add('on');dim.classList.add('on');bk.setAttribute('aria-hidden','false');
+    requestAnimationFrame(()=>{const sel=dayRow.children[bkStart];dayRow.style.scrollBehavior='auto';dayRow.scrollLeft=Math.max(0,sel.offsetLeft-dayRow.offsetLeft-40);dayRow.style.scrollBehavior='';syncDays()});
+  }
+  function closeBk(){bk.classList.remove('on');dim.classList.remove('on');bk.setAttribute('aria-hidden','true')}
+  $('.rent-open').addEventListener('click',openBk);
+  dim.addEventListener('click',closeBk);
+  $$('.bk-close').forEach(x=>x.addEventListener('click',closeBk));
+  $('.d-minus').addEventListener('click',()=>{bkDays=Math.max(1,bkDays-1);render()});
+  $('.d-plus').addEventListener('click',()=>{bkDays=Math.min(30,bkDays+1);render()});
+  $$('[data-opt]').forEach(i=>i.addEventListener('change',render));
+  $('.bk-send').addEventListener('click',()=>{
+    const {sum,end}=render(),s=dateAt(bkStart);
+    $('.bk-summary').textContent=B[cur].name+' · '+s.getDate()+' '+mon[s.getMonth()]+' – '+end.getDate()+' '+mon[end.getMonth()]+' · '+fmt(sum);
+    $('.bk-form').hidden=true;$('.bk-done').hidden=false;
+  });
+
+  return {open:play};
+}
+
+const worlds={drive:buildWorld('drive'),chill:buildWorld('chill')};
+
+/* ---------- start screen → world ---------- */
+const phone=document.querySelector('.phone');
+document.querySelectorAll('[data-world]').forEach(b=>b.addEventListener('click',e=>{
+  const r=phone.getBoundingClientRect(),w=document.getElementById('w-'+b.dataset.world);
+  w.style.setProperty('--x',((e.clientX||r.left+r.width/2)-r.left)+'px');
+  w.style.setProperty('--y',((e.clientY||r.top+r.height/2)-r.top)+'px');
+  w.classList.add('open');
+  worlds[b.dataset.world].open();
+}));
+</script>
+
+</body>
+</html>
