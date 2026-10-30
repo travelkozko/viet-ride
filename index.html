@@ -269,16 +269,16 @@ html.tg .phone{
 
   <button class="zone zone-chill" data-world="chill" tabindex="-1" aria-hidden="true"></button>
   <button class="zone zone-drive" data-world="drive" tabindex="-1" aria-hidden="true"></button>
-  <button class="chill" id="btn-chill" data-world="chill" aria-label="Мир Чил: лёгкие скутеры">
-    <span class="pill">Чил</span>
+  <button class="chill" id="btn-chill" data-world="chill" aria-label="Мир Chill: лёгкие скутеры">
+    <span class="pill">Chill</span>
   </button>
 
-  <button class="drive" id="btn-drive" data-world="drive" aria-label="Мир Драйв: мощные байки">
-    <span class="word">ДРАЙВ</span>
+  <button class="drive" id="btn-drive" data-world="drive" aria-label="Мир Drive: мощные байки">
+    <span class="word">DRIVE</span>
   </button>
 
-  <div class="wash garage w-chill" id="w-chill" role="dialog" aria-label="Чил"></div>
-  <div class="wash garage w-drive" id="w-drive" role="dialog" aria-label="Драйв"></div>
+  <div class="wash garage w-chill" id="w-chill" role="dialog" aria-label="Chill"></div>
+  <div class="wash garage w-drive" id="w-drive" role="dialog" aria-label="Drive"></div>
 </div>
 
 <script>
@@ -291,7 +291,7 @@ const $P=(vnd,usd)=>EN?usd:vnd;
 /* ---------- demo data ---------- */
 const WORLDS={
   drive:{
-    title:L('ДРАЙВ','DRIVE'),
+    title:'DRIVE',
     bikes:[
       {video:'media/garage.mp4?b=202610301730',poster:'media/garage-end.jpg?b=202610301730',name:'ADV 750 Touring',sub:L('эндуро-туринг · для дальних поездок','adventure touring · for long rides'),price:$P(1200000,48),chips:EN?['750 cc','70 hp','ABS','panniers']:['750 см³','70 л.с.','ABS','кофры']},
       {video:'media/chopper.mp4?b=202610301730',poster:'media/chopper-end.jpg?b=202610301730',name:'Cruiser 1300 Black',sub:L('чоппер · для неспешных прогулок','cruiser · for easy rides'),price:$P(1600000,64),chips:EN?['1300 cc','V-twin','low seat','chrome']:['1300 см³','V-twin','низкая посадка','хром']},
@@ -304,7 +304,7 @@ const WORLDS={
     ]
   },
   chill:{
-    title:L('Чил','Chill'),
+    title:'Chill',
     bikes:[
       {video:'media/vision.mp4?b=202610301730',poster:'media/vision-end.jpg?b=202610301730',name:'Honda Vision',sub:L('скутер · для города и пляжа','scooter · for town and beach'),price:$P(200000,8),chips:EN?['110 cc','automatic','storage','fuel-saving']:['110 см³','автомат','багажник','экономичный']},
       {video:'media/cub.mp4?b=202610301730',poster:'media/cub-end.jpg?b=202610301730',name:'Honda Super Cub',sub:L('ретро-мопед · легенда Вьетнама','retro moped · a Vietnam legend'),price:$P(250000,10),chips:EN?['110 cc','semi-auto','retro','light']:['110 см³','полуавтомат','ретро','лёгкий']},
