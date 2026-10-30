@@ -123,6 +123,7 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 .w-drive{--acc:#ff2bd6;--acc-rgb:255,43,214;--price:var(--sun);--sheet-rgb:12,10,8;--title-font:var(--f-neon)}
 .w-chill{--acc:#ff7a59;--acc-rgb:255,122,89;--price:#ffd08a;--sheet-rgb:34,18,16;--title-font:var(--f-retro)}
 .garage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.garage video.pre{visibility:hidden}
 /* Chill: lift the scene so the wheels sit above the sheet; the strip that opens at the bottom hides under it */
 .w-chill video{transform:translateY(-7%)}
 .g-top{
@@ -257,7 +258,7 @@ html.tg .phone{
 </head>
 <body>
 <div class="phone">
-  <video src="media/start.mp4?b=202610282004" poster="media/poster.jpg?b=202610282004" autoplay muted loop playsinline></video>
+  <video src="media/start.mp4?b=202610301730" poster="media/poster.jpg?b=202610301730" autoplay muted loop playsinline></video>
 
   <div class="brand">VIET RIDE</div>
 
@@ -279,9 +280,9 @@ const WORLDS={
   drive:{
     title:'ДРАЙВ',
     bikes:[
-      {video:'media/garage.mp4?b=202610282004',poster:'media/garage-end.jpg?b=202610282004',name:'ADV 750 Touring',sub:'эндуро-туринг · для дальних поездок',price:1200000,chips:['750 см³','70 л.с.','ABS','кофры']},
-      {video:'media/chopper.mp4?b=202610282004',poster:'media/chopper-end.jpg?b=202610282004',name:'Cruiser 1300 Black',sub:'чоппер · для неспешных прогулок',price:1600000,chips:['1300 см³','V-twin','низкая посадка','хром']},
-      {video:'media/street.mp4?b=202610282004',poster:'media/street-end.jpg?b=202610282004',name:'Street Fighter 900',sub:'стрит · для динамичной езды по городу',price:1400000,chips:['900 см³','115 л.с.','ABS','квикшифтер']}
+      {video:'media/garage.mp4?b=202610301730',poster:'media/garage-end.jpg?b=202610301730',name:'ADV 750 Touring',sub:'эндуро-туринг · для дальних поездок',price:1200000,chips:['750 см³','70 л.с.','ABS','кофры']},
+      {video:'media/chopper.mp4?b=202610301730',poster:'media/chopper-end.jpg?b=202610301730',name:'Cruiser 1300 Black',sub:'чоппер · для неспешных прогулок',price:1600000,chips:['1300 см³','V-twin','низкая посадка','хром']},
+      {video:'media/street.mp4?b=202610301730',poster:'media/street-end.jpg?b=202610301730',name:'Street Fighter 900',sub:'стрит · для динамичной езды по городу',price:1400000,chips:['900 см³','115 л.с.','ABS','квикшифтер']}
     ],
     options:[
       {id:'helmet',label:'Два шлема',price:50000,perDay:true,on:true},
@@ -292,9 +293,9 @@ const WORLDS={
   chill:{
     title:'Чил',
     bikes:[
-      {video:'media/vision.mp4?b=202610282004',poster:'media/vision-end.jpg?b=202610282004',name:'Honda Vision',sub:'скутер · для города и пляжа',price:200000,chips:['110 см³','автомат','багажник','экономичный']},
-      {video:'media/cub.mp4?b=202610282004',poster:'media/cub-end.jpg?b=202610282004',name:'Honda Super Cub',sub:'ретро-мопед · легенда Вьетнама',price:250000,chips:['110 см³','полуавтомат','ретро','лёгкий']},
-      {video:'media/vespa.mp4?b=202610282004',poster:'media/vespa-end.jpg?b=202610282004',name:'Vespa Primavera',sub:'итальянская классика · для красивых фото',price:450000,chips:['125 см³','автомат','стиль','мягкий ход']}
+      {video:'media/vision.mp4?b=202610301730',poster:'media/vision-end.jpg?b=202610301730',name:'Honda Vision',sub:'скутер · для города и пляжа',price:200000,chips:['110 см³','автомат','багажник','экономичный']},
+      {video:'media/cub.mp4?b=202610301730',poster:'media/cub-end.jpg?b=202610301730',name:'Honda Super Cub',sub:'ретро-мопед · легенда Вьетнама',price:250000,chips:['110 см³','полуавтомат','ретро','лёгкий']},
+      {video:'media/vespa.mp4?b=202610301730',poster:'media/vespa-end.jpg?b=202610301730',name:'Vespa Primavera',sub:'итальянская классика · для красивых фото',price:450000,chips:['125 см³','автомат','стиль','мягкий ход']}
     ],
     options:[
       {id:'helmet',label:'Два шлема',price:30000,perDay:true,on:true},
@@ -375,7 +376,13 @@ function buildWorld(key){
       </div>
     </div>`;
   const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)];
-  const v=$('video'),bk=$('.bk'),dim=$('.bk-dim'),dayRow=$('.bk-days');
+  let v=$('video');const bk=$('.bk'),dim=$('.bk-dim'),dayRow=$('.bk-days');
+  /* заглушка при переключении — первый кадр (пустая сцена), а не последний */
+  const startOf=b=>b.poster.replace('-end.jpg','-start.jpg');
+  /* второе видео заранее грузит следующий байк */
+  const pre=document.createElement('video');pre.muted=true;pre.playsInline=true;pre.preload='auto';pre.className='pre';
+  pre.setAttribute('muted','');pre.setAttribute('playsinline','');v.after(pre);let spare=pre;
+  function warm(){const n=B[(cur+1)%B.length];if(spare.dataset.src!==n.video){spare.dataset.src=n.video;spare.poster=startOf(n);spare.src=n.video;spare.load();}}
   let cur=0,bkStart=0,bkDays=3,dragMoved=false;
 
   /* catalog */
@@ -395,9 +402,15 @@ function buildWorld(key){
     cur=(i+B.length)%B.length;const b=B[cur];
     root.classList.add('switching');
     setTimeout(()=>{fill();root.classList.remove('switching')},250);
-    root.style.setProperty('--poster','url('+b.poster+')');v.poster=b.poster;v.src=b.video;v.load();play();
+    root.style.setProperty('--poster','url('+b.poster+')');
+    if(!reduce&&spare.dataset.src===b.video){
+      const old=v;v=spare;spare=old;old.pause();v.classList.remove('pre');old.classList.add('pre');
+    }else{
+      v.poster=reduce?b.poster:startOf(b);v.dataset.src=b.video;v.src=b.video;v.load();
+    }
+    play();if(!reduce)warm();
   }
-  root.style.setProperty('--poster','url('+B[0].poster+')');v.poster=B[0].poster;v.src=B[0].video;fill();
+  root.style.setProperty('--poster','url('+B[0].poster+')');v.poster=reduce?B[0].poster:startOf(B[0]);v.dataset.src=B[0].video;v.src=B[0].video;fill();
   $$('.g-arrow').forEach(a=>a.addEventListener('click',()=>show(cur+ +a.dataset.dir)));
   $('.g-back').addEventListener('click',()=>{closeBk();root.classList.remove('open')});
   let tx=null;
@@ -470,7 +483,7 @@ function buildWorld(key){
     $('.bk-form').hidden=true;$('.bk-done').hidden=false;
   });
 
-  return {open:play};
+  return {open(){play();if(!reduce)warm();}};
 }
 
 const worlds={drive:buildWorld('drive'),chill:buildWorld('chill')};
