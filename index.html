@@ -41,6 +41,11 @@ body{
   box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 80px rgba(255,43,214,.18),0 10px 60px rgba(255,140,80,.15);
 }
 .phone video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* половинки видео — тоже кнопки; граница идёт по диагонали кадра */
+.zone{position:absolute;inset:0;z-index:2;border:0;padding:0;margin:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.zone-chill{clip-path:polygon(0 0,100% 0,100% 12%,25% 100%,0 100%)}
+.zone-drive{clip-path:polygon(100% 12%,100% 100%,25% 100%)}
+.zone:active{background:rgba(255,255,255,.08)}
 
 /* top brand */
 .brand{
@@ -262,6 +267,8 @@ html.tg .phone{
 
   <div class="brand">VIET RIDE</div>
 
+  <button class="zone zone-chill" data-world="chill" tabindex="-1" aria-hidden="true"></button>
+  <button class="zone zone-drive" data-world="drive" tabindex="-1" aria-hidden="true"></button>
   <button class="chill" id="btn-chill" data-world="chill" aria-label="Мир Чил: лёгкие скутеры">
     <span class="pill">Чил</span>
   </button>
